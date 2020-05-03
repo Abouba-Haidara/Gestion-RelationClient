@@ -1,0 +1,43 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Client{% endblock %}
+
+{% block body %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Gestion relation client</h1>
+    <p class="lead">Bienvenue</p>
+  </div>
+</div>
+ 
+ <div class="container">
+   <div class="row flexbox">
+     <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Nom</th>
+          <th scope="col">Prenom</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Adresse</th>
+          <th scope="col" colspan="3">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for  c in clients %}
+        <tr>
+          <td>{{c.name}}</td>
+          <td>{{c.lastName}}</td>
+          <td>{{c.phone}}</td>
+          <td>{{c.address}}</td>
+          <td> <a href="{{ path('client_detail', {'code': c.id })}}" class="fa fa-eye btn btn-sm" title="show details "></a></td>
+          <td> <a href="{{ path('client_create')}}" class="fa fa-edit btn btn-sm" title="Editer le client "></a></td>
+          <td> <a href="{{ path('client_delete')}}" class="fa fa-remove btn-sm" title="Supprimer le client"></a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+   <div>
+ </div>  
+
+{% endblock %}
