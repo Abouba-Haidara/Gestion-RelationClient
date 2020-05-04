@@ -1,0 +1,17 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Employe{% endblock %}
+
+{% block body %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Gestion relation client</h1>
+    <p class="lead">Bienvenue</p>
+  </div>
+</div>
+ <div class="container mt-4">
+    <h1>Editer les information du  client</h1>
+     {{ include( 'template.form.client.html.twig',{form:form, button: 'editer'} )}}
+ </div>
+{% endblock %}

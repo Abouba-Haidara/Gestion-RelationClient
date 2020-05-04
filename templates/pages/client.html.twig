@@ -8,10 +8,17 @@
   <div class="container">
     <h1 class="display-4">Gestion relation client</h1>
     <p class="lead">Bienvenue</p>
+    <span class="pull-right"><a class="btn btn-primary btn-sm " href="{{ path('client_create')  }}">Ajouter</a></span>
   </div>
 </div>
  
- <div class="container">
+ <div class="container mt-4">
+ {% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+         {{message}}
+     </div>
+   {% endfor %}   
+     
    <div class="row flexbox">
      <table class="table table-sm">
       <thead>
@@ -20,7 +27,7 @@
           <th scope="col">Prenom</th>
           <th scope="col">Phone</th>
           <th scope="col">Adresse</th>
-          <th scope="col" colspan="3">Action</th>
+          <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -30,9 +37,15 @@
           <td>{{c.lastName}}</td>
           <td>{{c.phone}}</td>
           <td>{{c.address}}</td>
-          <td> <a href="{{ path('client_detail', {'code': c.id })}}" class="fa fa-eye btn btn-sm" title="show details "></a></td>
-          <td> <a href="{{ path('client_create')}}" class="fa fa-edit btn btn-sm" title="Editer le client "></a></td>
-          <td> <a href="{{ path('client_delete')}}" class="fa fa-remove btn-sm" title="Supprimer le client"></a></td>
+          <td> <a href="{{ path('client_detail', {'code': c.id })}}" class="fa fa-eye btn btn-sm" title="show details "> Voir</a>
+          <a href="{{ path('client_edit', {'id': c.id })}}" class="fa fa-edit btn btn-sm" title="Editer le client "> Editer</a>         
+           <form onsubmit="return confirm('Voulez-vous supprimer {{c.name  ~ '  ' ~ c.lastName }}  ? ')"
+           method="post" action="{{ path('client_delete', {'id': c.id } )}}" style="display:inline-block;"> 
+               <input  type="hidden" method name="_method" value="DELETE" />
+               <input  type="hidden" name="_token" value="{{ csrf_token('delete' ~ c.id )}}" />
+               <button type="submit" class="fa fa-remove btn btn-sm btn-danger"> Supprimer<button>
+            </form>
+           </td>
         </tr>
         {% endfor %}
       </tbody>

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
  */
@@ -18,16 +20,19 @@ class Client
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Length(min=4, max=20)
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Length(min=3, max=20)
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=15)
+     * @Assert\Length(min=9, max=14)
      */
     private $phone;
 
@@ -109,4 +114,22 @@ class Client
     public function getSlug() : string {
         return (new Slugify())->slugify($this->getName());
     }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank([
+            'payload' => ['severity' => 'error'],
+        ]));
+        $metadata->addPropertyConstraint('lastName', new Assert\NotBlank([
+            'payload' => ['severity' => 'error'],
+        ]));
+       
+        $metadata->addPropertyConstraint('address', new Assert\NotBlank([
+            'payload' => ['severity' => 'error'],
+        ]));
+        $metadata->addPropertyConstraint('email', new Assert\Email([
+            'message' => 'The email "{{ value }}" is not a valid email.',
+        ]));
+    }
+   
 }

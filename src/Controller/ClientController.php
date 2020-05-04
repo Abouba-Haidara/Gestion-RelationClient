@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use Twig\Environment;
 use App\Entity\Client;
+use App\Form\ClientType;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,33 +45,71 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
              ]
           );
       }
+
+
      /**
-     * @Route("/client/delte", name="client_delete")
+     *@Route("/client/delete/{id}", name="client_delete", methods="DELETE", requirements={"id":"[0-9]*"})
      * @return Response
      */
-    public function delete() : Response
+    public function delete(Client $client, Request $request) : Response
       {
+         if ($this->isCsrfTokenValid('delete' . $client->getId(), $request->get('_token'))){
+             $this->em->remove($client);
+             $this->em->flush();
+             $this->addFlash('success', 'client a été bien supprimé!');
+          return $this->redirectToRoute('client_show');
+         }
         
-          return $this->render('/pages/client.html.twig',
-             [
-                'clients' =>$this->clientRepository->findAll()
-             ]
-          );
+         return $this->redirectToRoute('client_show');
       }
 
     /**
-     * @Route("/client/add", name="client_create")
+     * @Route("/client/edit/{id}", name="client_edit", methods="GET|POST|PUT", requirements={"id":"[0-9]*"})
+     * @param Client $client
      * @return Response
      */
-    public function create() : Response
+
+
+    public function edit(Client $client, Request $request) : Response
+    {
+         $form =  $this->createForm(ClientType::class, $client);
+         $form->handleRequest($request);
+
+         if($form->isSubmitted() && $form->isValid()){
+            $this->em->flush();
+            $this->addFlash('success', 'Le client a été bien edité!');
+            return $this->redirectToRoute('client_show');
+         }
+        return $this->render('/pages/editClient.html.twig',[
+            'form' => $form->createView()
+         ]
+      
+      );
+    }
+
+    
+    /**
+     * @Route("/client/new", name="client_create", requirements={"id":"[0-9]*"})
+     * 
+     * @return Response
+     */
+    public function add(Request $request) : Response
     {
       $client =  new Client();
-           $client =  new Client();
-           $client->setLastName("Abouba")->setName("Haidara")->setEmail("abouba@gmail.com")->setPhone("777540819");
-           $em = $this->getDoctrine()->getManager();
-           $this->em->persist($client);
-           $this->em->flush();
-        return $this->render('/pages/addClient.html.twig');
+      $form =  $this->createForm(ClientType::class, $client);
+      $form->handleRequest($request);
+
+      if($form->isSubmitted() && $form->isValid()){
+         $this->em->persist($client);
+         $this->em->flush();
+         $this->addFlash('success', 'Le client a été bien ajouté!');
+         return $this->redirectToRoute('client_show');
+      }
+     return $this->render('/pages/addClient.html.twig',[
+         'form' => $form->createView()
+      ]
+   
+   );
     }
 
     /**
