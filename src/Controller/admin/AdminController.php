@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
   {
 
     /**
-     * @Route("/employe/show", name="employe_show")
+     * @Route("/admin/show", name="admin_show")
      */
       public function show() : Response
       {
@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
       }
 
       /**
-     * @Route("/employe/create", name="employe_create")
+     * @Route("/admin/create", name="admin_create")
      */
       public function create() : Response
       {

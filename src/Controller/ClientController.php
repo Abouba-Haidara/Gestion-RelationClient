@@ -68,8 +68,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
      * @param Client $client
      * @return Response
      */
-
-
     public function edit(Client $client, Request $request) : Response
     {
          $form =  $this->createForm(ClientType::class, $client);

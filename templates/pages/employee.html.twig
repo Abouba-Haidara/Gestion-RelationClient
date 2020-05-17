@@ -1,0 +1,56 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Employees{% endblock %}
+
+{% block body %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Gestion relation client</h1>
+    <p class="lead">Bienvenue</p>
+    <span class="pull-right"><a class="btn btn-primary btn-sm " href="{{ path('employe_create')  }}">Ajouter</a></span>
+  </div>
+</div>
+ 
+ <div class="container mt-4">
+ {% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+         {{message}}
+     </div>
+   {% endfor %}   
+     
+   <div class="row flexbox">
+     <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Nom</th>
+          <th scope="col">Prenom</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Adresse</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for  c in employees %}
+        <tr>
+          <td>{{c.name}}</td>
+          <td>{{c.lastName}}</td>
+          <td>{{c.phone}}</td>
+          <td>{{c.address}}</td>
+          <td> <a href="{{ path('employe_detail', {'code': c.id })}}" class="fa fa-eye btn btn-sm" title="show details "> Voir</a>
+          <a href="{{ path('employe_edit', {'id': c.id })}}" class="fa fa-edit btn btn-sm" title="Editer le employeet "> Editer</a>         
+           <form onsubmit="return confirm('Voulez-vous supprimer {{c.name  ~ '  ' ~ c.lastName }}  ? ')"
+           method="post" action="{{ path('employe_delete', {'id': c.id } )}}" style="display:inline-block;"> 
+               <input  type="hidden" method name="_method" value="DELETE" />
+               <input  type="hidden" name="_token" value="{{ csrf_token('delete' ~ c.id )}}" />
+               <button type="submit" class="fa fa-remove btn btn-sm btn-danger"> Supprimer<button>
+            </form>
+           </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+   <div>
+ </div>  
+
+{% endblock %}

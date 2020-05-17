@@ -1,0 +1,40 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Client{% endblock %}
+
+{% block body %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Gestion relation client</h1>
+    <p class="lead">Bienvenue</p>
+  </div>
+</div>
+ 
+ <div class="container">
+   <div class="row flexbox">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Client</h5>
+        <p class="card-text"><strong>Nom  : </strong>   {{client[0].name}}</p>
+        <p class="card-text"><strong>Prenom  : </strong>   {{client[0].lastName}}</p>
+        <p class="card-text"><strong>Telephone :  </strong>{{client[0].phone}}</p>
+        <p class="card-text"><strong>Adresse  : </strong> {{client[0].address}}</p>
+        <p class="card-text"><strong>Email  : </strong> {{client[0].email}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Services</h5>
+        <p class="card-text">...</p>
+          ...s
+      </div>
+    </div>
+  </div>
+</div>
+ </div>  
+
+{% endblock %}

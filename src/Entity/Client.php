@@ -46,6 +46,12 @@ class Client
      */
     private $email;
 
+   /**
+     * @ORM\OneToMany(targetEntity="App\Entity\FicheService", mappedBy="codeClient")
+     */
+    private $ficheservices;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -109,6 +115,19 @@ class Client
         $this->email = $email;
 
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->ficheservices = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|FicheService[]
+     */
+    public function getFicheservices(): Collection
+    {
+        return $this->ficheservices;
     }
 
     public function getSlug() : string {

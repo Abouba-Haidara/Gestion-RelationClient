@@ -1,0 +1,12 @@
+{% block body %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Gestion relation client</h1>
+    <p class="lead">Bienvenue</p>
+  </div>
+</div>
+ <div class="container mt-4">
+    <h1>Editer les information de  l'employee</h1>
+     {{ include( 'template.form.employee.html.twig',{form:form, button: 'editer'} )}}
+ </div>
+{% endblock %}
