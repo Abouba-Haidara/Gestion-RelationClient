@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecuriteController  extends AbstractController
 {
@@ -26,15 +27,25 @@ class SecuriteController  extends AbstractController
     /**
      * @Route("/registration", name="sec_registration")
      */
-    public function registration(Request $request, EventDispatcherInterface $eventDispatcher): Response
+    public function registration(Request $request, UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher): Response
     {
-        $user =  new User();
-        $form =  $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+        // 1) build the form
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
 
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($user);
-            $this->em->flush();
+
+            // 3) Encode the password (you could also do this via Doctrine listener)
+            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+
+            // 4) save the User!
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
             $this->addFlash('success', 'Le client a été bien ajouté!');
             //On déclenche l'event
             $event = new GenericEvent($user);

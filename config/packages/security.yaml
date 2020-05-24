@@ -23,4 +23,4 @@ security:
     # - { path: ^/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
   encoders:
-    Symfony\Component\Security\Core\User\User: plaintext
+    App\Entity\User: bcrypt
