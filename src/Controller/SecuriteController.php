@@ -46,10 +46,10 @@ class SecuriteController  extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le client a été bien ajouté!');
             //On déclenche l'event
             $event = new GenericEvent($user);
             $eventDispatcher->dispatch(Events::USER_REGISTERED, $event);
+            // Set a "flash" success message for the user
             $this->addFlash('success', 'un message vous a  été envoyé.');
             return $this->redirectToRoute('sec_registration');
         }
